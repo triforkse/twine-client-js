@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+ <testsuite name="Package Configuration:" timestamp="2015-10-27T15:22:08" hostname="localhost" time="0.022" errors="0" tests="4" skipped="0" disabled="0" failures="0">
+  <testcase classname="Package Configuration:" name="calls onError if a subscription fails" time="0.012" />
+  <testcase classname="Package Configuration:" name="calls onChange with the initial data, after connecting" time="0.003" />
+  <testcase classname="Package Configuration:" name="calls onChange with any subsequent changes" time="0.002" />
+  <testcase classname="Package Configuration:" name="calls onError if login fails" time="0.001" />
+ </testsuite>
+</testsuites>
