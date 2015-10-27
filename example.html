@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="dist/twine-client.js"></script>
+  <script type="text/javascript">
+        // Connect to a Meteor backend
+      var client = new TwineClient({endpoint: 'localhost:3000', username: 'admin', password: 'admin', bundleId: 'm6ks8Bet9PCnbkKwX', useLatestVersion: true});
+
+      client.onChange(function(data) {
+        document.body.innerHTML = '<pre>' + JSON.stringify(data, true, '    ') + '</pre>';
+      });
+
+      client.onError(function(error) {
+        console.error(error);
+      });
+
+      client.connect().done();
+  </script>
+</head>
+
+<body>
+
+</body>
+</html>

@@ -1,16 +1,23 @@
 var Asteroid = require('asteroid/dist/asteroid.browser.js');
 
 var AsteroidBackend = function(endpoint) {
+  console.log(endpoint);
   this.ddpClient = new Asteroid(endpoint);
 };
 
-AsteroidBackend.prototype.login = function(username, password, cb) {
-  return this.ddpClient.loginWithPassword(username, password);
+AsteroidBackend.prototype.login = function(username, password) {
+  console.log("login");
+
+  return this.ddpClient.loginWithPassword(username, password).timeout(30000).fail(function(x) {
+    console.error(x);
+  });
 };
 
 AsteroidBackend.prototype.subscribe = function(bundleId, onData) {
-  return this.ddpClient.subscribe("api/translations", bundleId).ready.then(function () {
-    var translations = this.ddpClient.getCollection("translations");
+  console.log("subscribe");
+  var self = this;
+  return this.ddpClient.subscribe("api/v1/translations", bundleId).ready.then(function () {
+    var translations = self.ddpClient.getCollection("translations");
     var query = translations.reactiveQuery({});
     query.on("change", onData);
   });
@@ -29,8 +36,6 @@ TwineClient.prototype.connect = function() {
   var self = this;
   var opt = this.options;
   var ddpClient = new this.backend(opt.endpoint);
-
-  var login = ddpClient.login(opt.username, opt.password);
 
   var onError = function(error) {
     console.log("onError");
@@ -56,7 +61,8 @@ TwineClient.prototype.connect = function() {
     return ddpClient.subscribe(opt.bundleId, onDataReceived);
   };
 
-  return login.then(fetchInitialData)
+  return ddpClient.login(opt.username, opt.password)
+    .then(fetchInitialData)
     .then(onDataReceived)
     .then(subscribe)
     .fail(onError);
