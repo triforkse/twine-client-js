@@ -2,7 +2,7 @@ var Asteroid = require('asteroid/dist/asteroid.browser.js');
 
 var AsteroidBackend = function(endpoint) {
   console.log(endpoint);
-  this.ddpClient = new Asteroid(endpoint);
+  this.ddpClient = new Asteroid(endpoint, true);
 };
 
 AsteroidBackend.prototype.login = function(username, password) {

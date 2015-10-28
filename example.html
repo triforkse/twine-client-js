@@ -4,7 +4,7 @@
   <script src="dist/twine-client.js"></script>
   <script type="text/javascript">
         // Connect to a Meteor backend
-      var client = new TwineClient({endpoint: 'localhost:3000', username: 'admin', password: 'admin', bundleId: 'm6ks8Bet9PCnbkKwX', useLatestVersion: true});
+      var client = new TwineClient({endpoint: 'twine.trifork.se', username: 'admin', password: 'admin', bundleId: 'eb7PXtmiGjkpyK67s', useLatestVersion: true});
 
       client.onChange(function(data) {
         document.body.innerHTML = '<pre>' + JSON.stringify(data, true, '    ') + '</pre>';

@@ -3895,7 +3895,7 @@
 
 	var AsteroidBackend = function(endpoint) {
 	  console.log(endpoint);
-	  this.ddpClient = new Asteroid(endpoint);
+	  this.ddpClient = new Asteroid(endpoint, true);
 	};
 
 	AsteroidBackend.prototype.login = function(username, password) {
@@ -3922,6 +3922,7 @@
 	AsteroidBackend.prototype.fetch = function(bundleId, useLatestVersion, onDataReceived) {
 	  return this.ddpClient.call("bundle/download", bundleId, useLatestVersion).result.then(function(data) {
 	    onDataReceived(data);
+	    return data;
 	  });
 	};
 
@@ -3943,8 +3944,8 @@
 	  };
 
 	  var onDataReceived = function(data) {
-	    console.log("onDataReceived");
 	    if (self.changeCallback) {
+	      console.log("onDataReceived", data);
 	      self.changeCallback(data);
 	    }
 	  };
