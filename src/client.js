@@ -13,18 +13,24 @@ AsteroidBackend.prototype.login = function(username, password) {
   });
 };
 
-AsteroidBackend.prototype.subscribe = function(bundleId, onData) {
+AsteroidBackend.prototype.subscribe = function(bundleId, triggerFetch) {
   console.log("subscribe");
   var self = this;
   return this.ddpClient.subscribe("api/v1/translations", bundleId).ready.then(function () {
     var translations = self.ddpClient.getCollection("translations");
     var query = translations.reactiveQuery({});
-    query.on("change", onData);
+    query.on("change", function(_data) {
+      console.log("CHANGE");
+      triggerFetch();
+    });
   });
 };
 
-AsteroidBackend.prototype.fetch = function(bundleId, useLatestVersion) {
-  return this.ddpClient.call("bundle/download", bundleId, useLatestVersion).result;
+AsteroidBackend.prototype.fetch = function(bundleId, useLatestVersion, onDataReceived) {
+  return this.ddpClient.call("bundle/download", bundleId, useLatestVersion).result.then(function(data) {
+    onDataReceived(data);
+    return data;
+  });
 };
 
 var TwineClient = function(options) {
@@ -45,25 +51,24 @@ TwineClient.prototype.connect = function() {
   };
 
   var onDataReceived = function(data) {
-    console.log("onDataReceived");
     if (self.changeCallback) {
+      console.log("onDataReceived", data);
       self.changeCallback(data);
     }
   };
 
-  var fetchInitialData = function() {
+  var triggerFetchData = function() {
     console.log("fetchInitialData");
-    return ddpClient.fetch(opt.bundleId, opt.useLatestVersion);
+    return ddpClient.fetch(opt.bundleId, opt.useLatestVersion, onDataReceived);
   };
 
   var subscribe = function() {
     console.log("subscribe");
-    return ddpClient.subscribe(opt.bundleId, onDataReceived);
+    return ddpClient.subscribe(opt.bundleId, triggerFetchData);
   };
 
   return ddpClient.login(opt.username, opt.password)
-    .then(fetchInitialData)
-    .then(onDataReceived)
+    .then(triggerFetchData)
     .then(subscribe)
     .fail(onError);
 }

@@ -6,16 +6,16 @@ describe("Package Configuration:", function () {
   var backend;
   var client;
   var settings = {
-    onChangeCallback: null,
-    failToConnect: false
+    fakeServerEvent: null,
+    failToConnect: false,
+    serverData: {projectId: "MyProject"}
   };
 
   beforeEach(function() {
 
-    console.log("before");
-
-    settings.onChangeCallback = null;
+    settings.fakeServerEvent = null;
     settings.failToConnect = false;
+    settings.serverData = {projectId: "MyProject"};
 
     client = new TwineClient({endpoint: 'localhost:3000', username: 'username', password: 'password', bundleId: 'bundleId', useLatestVersion: true});
 
@@ -23,7 +23,8 @@ describe("Package Configuration:", function () {
       validUsername: "username",
       validPassword: "password",
       postChange: function(data) {
-        settings.onChangeCallback(data);
+        settings.serverData = data;
+        settings.fakeServerEvent();
       },
       login: function(username, password) {
         if (username === this.validUsername && password === this.validPassword) {
@@ -34,7 +35,7 @@ describe("Package Configuration:", function () {
         }
       },
       subscribe: function(bundleId, onData) {
-        settings.onChangeCallback = onData;
+        settings.fakeServerEvent = onData;
         if (!settings.failToConnect) {
             return Q.when();
         }
@@ -42,8 +43,11 @@ describe("Package Configuration:", function () {
           return Q.reject({message: "subscription failed"});
         }
       },
-      fetch: function(bundleId, useLatestVersion) {
-        return Q.when({projectId: "MyProject"})
+      fetch: function(bundleId, useLatestVersion, onDataReceived) {
+        return Q.when(settings.serverData).then(function(data) {
+          onDataReceived(data);
+          return data;
+        });;
       }
     };
 
