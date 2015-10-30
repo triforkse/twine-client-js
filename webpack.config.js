@@ -1,7 +1,7 @@
 module.exports = {
-  entry: './entry.js',
+  entry: './src/client.js',
   output: {
-    path: __dirname + "/dist",
-    filename: 'twine-client.js'
+    libraryTarget: "umd",
+    library: "TwineClient"
   }
 };

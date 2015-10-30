@@ -1,8 +1,8 @@
 var Asteroid = require('asteroid/dist/asteroid.browser.js');
 
-var AsteroidBackend = function(endpoint) {
+var AsteroidBackend = function(endpoint, ssl) {
   console.log(endpoint);
-  this.ddpClient = new Asteroid(endpoint, true);
+  this.ddpClient = new Asteroid(endpoint, ssl);
 };
 
 AsteroidBackend.prototype.login = function(username, password) {
@@ -41,7 +41,7 @@ var TwineClient = function(options) {
 TwineClient.prototype.connect = function() {
   var self = this;
   var opt = this.options;
-  var ddpClient = new this.backend(opt.endpoint);
+  var ddpClient = new this.backend(opt.endpoint, opt.ssl);
 
   var onError = function(error) {
     console.log("onError");

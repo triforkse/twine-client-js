@@ -1,10 +1,11 @@
 {
   "name": "twine-client",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "A ddp client for subscribing to Twine translation changes",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/grunt"
+    "test": "./node_modules/.bin/grunt test",
+    "build": "webpack src/client.js dist/twine-client.js --config webpack.config.js"
   },
   "repository": {
     "type": "git",
