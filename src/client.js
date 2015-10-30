@@ -1,3 +1,5 @@
+window.DDP = require('ddp.js/src/ddp.js');
+window.Q = require('q/q.js');
 var Asteroid = require('asteroid/dist/asteroid.browser.js');
 
 var AsteroidBackend = function(endpoint, ssl) {
