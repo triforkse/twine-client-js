@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './src/client.js',
+  entry: './entry.js',
   output: {
     libraryTarget: "umd",
     library: "TwineClient"
