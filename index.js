@@ -1,1 +1,1 @@
-module.exports = require('./src/dist/twine-client.js');
+module.exports = require('./dist/twine-client.js');
